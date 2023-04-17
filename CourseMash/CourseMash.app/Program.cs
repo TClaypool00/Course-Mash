@@ -1,7 +1,13 @@
+using CourseMash.app;
+using CourseMash.app.App_Code.BOL;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<CourseMashContext>(options => options.UseMySql(SecretConfig.ConnectionString, new MySqlServerVersion(SecretConfig.Version)));
 
 var app = builder.Build();
 
