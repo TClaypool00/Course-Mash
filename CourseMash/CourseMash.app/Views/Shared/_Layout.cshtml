@@ -31,6 +31,8 @@
         </nav>
     </header>
     <div class="container">
+        <p id="errorMessage" class="text-danger">@ViewBag.error</p>
+        <p id="successMessage" class="text-success">@ViewBag.seccess</p>
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
