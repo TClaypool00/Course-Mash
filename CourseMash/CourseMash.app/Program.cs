@@ -1,5 +1,7 @@
 using CourseMash.app;
+using CourseMash.app.App_Code.BLL;
 using CourseMash.app.App_Code.BOL;
+using CourseMash.app.App_Code.DAL;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +10,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<CourseMashContext>(options => options.UseMySql(SecretConfig.ConnectionString, new MySqlServerVersion(SecretConfig.Version)));
+
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IBCryptService, BCryptService>();
 
 var app = builder.Build();
 
