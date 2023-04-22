@@ -20,6 +20,7 @@ namespace CourseMash.app.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         public IActionResult Privacy()
         {
             return View();
