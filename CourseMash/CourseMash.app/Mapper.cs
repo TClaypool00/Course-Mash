@@ -17,5 +17,19 @@ namespace CourseMash.app
                 PhoneNumb = model.PhoneNumb
             };
         }
+
+        public static UserViewModel MapUser(User user)
+        {
+            return new UserViewModel
+            {
+                UserId = user.UserId,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Password = user.Password,
+                IsAdmin = user.IsAdmin,
+                PhoneNumb = user.PhoneNumb,
+            };
+        }
     }
 }

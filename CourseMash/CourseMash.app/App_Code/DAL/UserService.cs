@@ -28,9 +28,11 @@ namespace CourseMash.app.App_Code.DAL
             throw new NotImplementedException();
         }
 
-        public Task<UserViewModel> GetUserByEmailAsync(string email)
+        public async Task<UserViewModel> GetUserByEmailAsync(string email)
         {
-            throw new NotImplementedException();
+            var dataUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+
+            return Mapper.MapUser(dataUser);
         }
 
         public Task<List<UserViewModel>> GetUsersAsync()

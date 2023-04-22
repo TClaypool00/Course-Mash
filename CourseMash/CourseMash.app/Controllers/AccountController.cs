@@ -1,10 +1,14 @@
 ﻿using CourseMash.app.App_Code.BLL;
 using CourseMash.app.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CourseMash.app.Controllers
 {
+    [AllowAnonymous]
     public class AccountController : Controller
     {
         private readonly IUserService _userService;
@@ -23,6 +27,7 @@ namespace CourseMash.app.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> RegisterAsync(RegisterViewModel model)
         {
             try
@@ -69,13 +74,14 @@ namespace CourseMash.app.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> LoginAsync(LoginViewModel model)
         {
             try
             {
                 if (!await _userService.UserExistsByEmailAsync(model.Email))
                 {
-                    ModelState.AddModelError("Email", "Email address invalid");
+                    ModelState.AddModelError("Email", "Invalid Email Address");
                 }
 
                 var user = await _userService.GetUserByEmailAsync(model.Email);
@@ -88,16 +94,47 @@ namespace CourseMash.app.Controllers
                 if (!ModelState.IsValid)
                 {
                     return View(model);
-                } else
-                {
-                    return RedirectToAction("Index", "Home");
                 }
+
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, user.UserId.ToString()),
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.MobilePhone, user.PhoneNumb),
+                    new Claim("FirstName", user.FirstName),
+                    new Claim("LastName", user.LastName),
+                    new Claim(ClaimTypes.Role, user.IsAdmin ? "Admin" : "User")
+                };
+
+                var claimsIdentity = new ClaimsIdentity(
+                    claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                var authProperties = new AuthenticationProperties
+                {
+                    ExpiresUtc = DateTime.Now.AddHours(1)
+                };
+
+                await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity),
+                authProperties);
+
+                return RedirectToAction("Index", "Home");
+
             } catch (Exception e)
             {
                 ViewBag.error = e.Message;
 
                 return View(model);
             }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> LogOutAsync()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            return RedirectToAction("Login");
         }
     }
 }
