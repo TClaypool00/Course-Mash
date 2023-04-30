@@ -1,5 +1,6 @@
 ﻿using CourseMash.app.App_Code.BOL;
 using CourseMash.app.Models;
+using CourseMash.app.Models.PostModel;
 
 namespace CourseMash.app
 {
@@ -29,6 +30,25 @@ namespace CourseMash.app
                 Password = user.Password,
                 IsAdmin = user.IsAdmin,
                 PhoneNumb = user.PhoneNumb,
+            };
+        }
+
+        public static SchoolViewModel MapSchool(School school)
+        {
+            return new SchoolViewModel
+            {
+                SchoolId = school.SchoolId,
+                SchoolName = school.SchoolName,
+                IsActive = school.IsActive
+            };
+        }
+
+        public static School MapSchool(PostSchoolViewModel school)
+        {
+            return new School
+            {
+                IsActive = true,
+                SchoolName = school.SchoolName
             };
         }
     }
