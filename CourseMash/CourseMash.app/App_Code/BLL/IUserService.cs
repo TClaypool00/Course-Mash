@@ -19,5 +19,7 @@ namespace CourseMash.app.App_Code.BLL
         public Task<bool> UserExistsByEmailAsync(string email);
 
         public Task<bool> UserExistsByPhoneNumbAsync(string phoneNumb);
+
+        public bool UserIsApprovedByApprovedByEmail(string email);
     }
 }

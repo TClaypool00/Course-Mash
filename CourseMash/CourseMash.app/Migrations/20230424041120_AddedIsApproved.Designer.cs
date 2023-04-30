@@ -3,6 +3,7 @@ using System;
 using CourseMash.app.App_Code.BOL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CourseMash.app.Migrations
 {
     [DbContext(typeof(CourseMashContext))]
-    partial class CourseMashContextModelSnapshot : ModelSnapshot
+    [Migration("20230424041120_AddedIsApproved")]
+    partial class AddedIsApproved
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

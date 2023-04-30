@@ -28,5 +28,9 @@ namespace CourseMash.app.App_Code.BOL
         public string PhoneNumb { get; set; }
 
         public bool IsAdmin { get; set; }
+
+        public School School { get; set; }
+
+        public bool IsApproved { get; set; }
     }
 }

@@ -18,6 +18,16 @@ namespace CourseMash.app.App_Code.DAL
         {
             var dataModel = Mapper.MapUser(model);
 
+            if (model.SchoolId is 0)
+            {
+                dataModel.School = null;
+                dataModel.IsApproved = false;
+            }
+            else
+            {
+                dataModel.School = await _context.Schools.FirstOrDefaultAsync(s => s.SchoolId == model.SchoolId);
+            }
+
             await _context.Users.AddAsync(dataModel);
 
             await SaveAsync();
@@ -58,6 +68,11 @@ namespace CourseMash.app.App_Code.DAL
         public Task<bool> UserExistsByPhoneNumbAsync(string phoneNumb)
         {
             return _context.Users.AnyAsync(u => u.PhoneNumb == phoneNumb);
+        }
+
+        public bool UserIsApprovedByApprovedByEmail(string email)
+        {
+            return _context.Users.FirstOrDefaultAsync(u => u.Email == email).Result.IsApproved;
         }
 
         private async Task SaveAsync()
