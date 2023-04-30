@@ -1,0 +1,86 @@
+﻿@model CourseMash.app.Models.CombinedViewModels.SchoolsViewModelWithPost
+
+@{
+    ViewData["Title"] = "Schools";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    Add a school
+</button>
+
+<div class="modal fade" id="staticBackdrop" tabindex="-1" aria-labelledby="AddSchool" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdrop">Add a School</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input asp-for="PostSchoolViewModel.SchoolName" class="form-control" placeholder="@Html.DisplayNameFor(m => m.PostSchoolViewModel.SchoolName)" disabled="disabled" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button id="addSchoolBtn" type="button" class="btn btn-primary">Add School</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (Model.Schools.Count > 0)
+{
+    <table class="table">
+        <caption>@ViewData["Title"]</caption>
+        <thead>
+            <tr>
+                <th id="SchoolName">
+                    @Html.DisplayNameFor(m => m.Schools.First().SchoolName)
+                </th>
+
+                <th id="IsActive">
+                    @Html.DisplayNameFor(m => m.Schools.First().IsActive)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Schools)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(m => item.SchoolName)
+                    </td>
+
+                    <td>
+                        <input class="form-check-input" type="checkbox" checked="@item.IsActive" disabled />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+} else
+{
+    <p>No schools</p>
+}
+<script>
+    const btnAddSchool = document.getElementById("addSchoolBtn");
+    const txtSchoolName = document.getElementById('PostSchoolViewModel_SchoolName')
+
+    btnAddSchool.addEventListener('click', function() {
+        const data = { schoolName : txtSchoolName.value }
+
+        $.ajax({
+            type: 'POST',
+            url: "@Url.Action("PostSchool")",
+            data: data,
+            success: function(msg) {
+                console.log(msg)
+            },
+            error: function(err) {
+                console.log(err)
+            }
+        });
+    })
+</script>
