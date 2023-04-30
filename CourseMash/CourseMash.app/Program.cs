@@ -14,6 +14,7 @@ builder.Services.AddDbContext<CourseMashContext>(options => options.UseMySql(Sec
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IBCryptService, BCryptService>();
+builder.Services.AddScoped<ISchoolService, SchoolService>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
