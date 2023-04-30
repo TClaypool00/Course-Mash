@@ -22,6 +22,11 @@ namespace CourseMash.app.Models
         [RegularExpression("\\(?\\d{3}\\)?-? *\\d{3}-? *-?\\d{4}", ErrorMessage = "Not a valid phone number")]
         public string PhoneNumb { get; set; }
 
+        [Display(Name = "Is Admin?")]
         public bool IsAdmin { get; set; }
+        
+        public bool IsApproved { get; set; }
+
+        public int? SchoolId { get; set; }        
     }
 }
